@@ -18,3 +18,6 @@ Basic Bot Created in CSharp, using BotSDK
 
 ## Carousel example
 ![Carousel Example](https://github.com/fabioono25/BotBuilderSDKCSharp/blob/master/images/carousel.PNG)
+
+## Using LUIS
+![LUIS Example](https://github.com/fabioono25/BotBuilderSDKCSharp/blob/master/images/cotacao.PNG)
