@@ -115,9 +115,11 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\CotacaoDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Formulario\Pedido.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cotacao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

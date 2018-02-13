@@ -1,9 +1,13 @@
 ﻿using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using System;
+using Microsoft.Bot.Builder.FormFlow;
+using System.Threading;
 
 namespace Bot_Application
 {
@@ -16,10 +20,29 @@ namespace Bot_Application
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+            //dica para trabalhar com locale
+            var currentUICulture = Thread.CurrentThread.CurrentUICulture;
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+
             if (activity.Type == ActivityTypes.Message)
             {
                 //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-                await Conversation.SendAsync(activity, () => new Dialogs.CotacaoDialog());
+                //await Conversation.SendAsync(activity, () => new Dialogs.CotacaoDialog());
+                await this.SendConversationAsync(activity);
+            }
+            else if (activity.Type == ActivityTypes.ConversationUpdate)
+            {
+                if (activity.MembersAdded != null && activity.MembersAdded.Any())
+                {
+                    foreach (var member in activity.MembersAdded)
+                    {
+                        if (member.Id != activity.Recipient.Id)
+                        {
+                            //disparo de inicio do formulário
+                            await this.SendConversationAsync(activity);
+                        }
+                    }
+                }
             }
             else
             {
@@ -27,6 +50,11 @@ namespace Bot_Application
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        private async Task SendConversationAsync(Activity activity)
+        {
+            await Conversation.SendAsync(activity, () => Chain.From(() => FormDialog.FromForm(() => Formulario.Pedido.BuildForm(), FormOptions.PromptFieldsWithValues)));
         }
 
         private Activity HandleSystemMessage(Activity message)
